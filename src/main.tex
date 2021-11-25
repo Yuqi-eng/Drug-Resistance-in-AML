@@ -45,6 +45,7 @@ Here $u$ is the concentration of the drug, it is dependent on time $t$ and radiu
 \begin{align*}
     u(r = b, t = 0) &= c\\
     u(r < b, t = 0) &= 0\\
+    u(r = b, t > 0) &= 0\\
     \frac{\partial u}{\partial t}(r = a, t) &= 0
 \end{align*}
 Here $b$ is the radius at cell membranes, $a$ is the radius at the nucleus (target of the drug). We assume that the a constant concentration of drug reaches the cell membrane at time zero, when there is zero drug concentration in other parts of the cell. When the drug reaches the nucleus of the cell, it gets absorbed, and the cell either goes through apoptosis or builds up resistance depending on the concentration of drug that reaches the cell.
@@ -89,9 +90,9 @@ Here $x$ is the sensitive cell mass with low Pgp expression and requires lower d
 
 One way to link these is by the following mechanism: For sensitive cell types, if $u_{Total} \leq k_1$, cell builds up resistance, if $u_{Total} > k_1$, cell goes through apoptosis. For resistant cell types, if $u_{Total} > k_2$, cell goes through apoptosis. $k_1, k_2$ are threshold concentration values and intuitively $k_2 > k_1$, as resistant cells needs higher concentration of drugs in order to go through apoptosis. 
 
-For our purposes, we will assume the destruction rates are constant, or that it follows a bell curve distribution. 
+For our purposes, we will assume the destruction rates are constant, or that it follows a bell curve distribution over time. 
 \begin{align*}
-    f(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-0.5(\frac{x-\mu}{\sigma})^2}
+    f(t) = \frac{1}{\sigma\sqrt{2\pi}}e^{-0.5(\frac{t-\mu}{\sigma})^2}
 \end{align*}
 
 \section{Numerical Approximation}
@@ -108,22 +109,28 @@ We model the cell conversion model with the destruction function as a constant a
 \includegraphics[scale = 0.6]{constant.png}\\
 \textbf{Figure 3: Cell type conversion with constant destruction rates}
 
+\includegraphics[scale = 0.6]{bell_2.png}\\
+\textbf{Figure 4: Cell type conversion with varying destruction rates with high sensitive cell growth rate}
+
 \includegraphics[scale = 0.6]{bell.png}\\
-\textbf{Figure 4: Cell type conversion with varying destruction rates}
+\textbf{Figure 5-1: Cell type conversion with varying destruction rates with low sensitive cell growth rate over 0.5 month}
+
+\includegraphics[scale = 0.6]{low growth rate.png}\\
+\textbf{Figure 5-2: Cell type conversion with varying destruction rates with low sensitive cell growth rate over 2 months}
 
 \section{Conclusions}
 Our model shows that high Pgp concentration leads to low drug concentration received at the nucleus, resulting in drug resistant. We also observe that over time, resistant cells grow faster than sensitive cells. Sensitive cells have the potential to be destroyed or controlled over the course of treatment if they don't build up resistance.
 
 \textbf{Pgp expression and drug concentration profile at nucleus} By numerical approximation, we find that about 75.1\% of drugs released at cell membrane reaches the nucleus in sensitive cells, and 26.3\% of drugs released at cell membrane reaches the nucleus in resistant cells. Figure 1, 2 shows that the concentration profiles at nucleus over time follows the same distribution. Concentration peaked at about 0.0044mM for sensitive cells and 0.00169mM for resistant cells. 
 
-\textbf{Sensitive vs. resistant cell population} We observe that in the case of constant destruction rates, both cell populations grow exponentially. Resistant cells tripled in their population over 2 months, while sensitive cell populations grew about 1.5 its original size. In the case of varying destruction rates modelled by a bell curve, we observe that resistant cell population grows exponentially where as the sensitive cell population is controlled and decreasing overall. 
+\textbf{Sensitive vs. resistant cell population} We observe that in the case of constant destruction rates, both cell populations grow exponentially. Resistant cells tripled in their population over 2 months, while sensitive cell populations grew about 1.5 its original size. In the case of varying destruction rates modelled by a bell curve, we observe that resistant cell population grows exponentially where as the sensitive cell population is more controlled overall. We observe differences in growth behavior by adjusting sensitive cell growth rate. When this rate is set to be high, as shown in figure 4, sensitive cell population is controlled over 1 month but then start to grow exponentially. When this rate is set to be low, as shown in figure 5-1, 5-2, sensitive cells stay under controlled for a longer period of time.
 
 \textbf{Clinical implications} We make two clinical implications from our model. 1) Since high Pgp concentration contributes to drug resistance, Pgp inhibitors may be administered along with chemotherapy drugs to reduce drug efflux. 2) It is important to control dosages of chemotherapy drugs, in order to suppress both cell types without introducing drug resistance which will stunt the treatment progress. 
 
 \section{Evaluation and Future Work}
 Mechanisms for drug resistance is extremely complex, this paper chose to focus on one aspect of it -- namely intracellular Pgp concentration. While our model produced desirable results that aligns with biological intuitions, there are several limitations that we discuss in this section.
 
-\textbf{Pgp transport and reaction} In our numerical model, we did not take account of Pgp transport in cells. We also ignored the intracellular distribution and the transport rate of Pgp. 
+\textbf{Pgp transport and reaction} In our numerical model, we did not take account of Pgp transport in cells. We also ignored the intracellular distribution and the transport rate of Pgp. This was taken account in the construction of the model but was not implemented analytically or numerically. In future work we'd like to expand on this.
 
 \textbf{Boundary conditions} In our boundary condition we assumed that the blood will carry a constant amount of drugs to the membrane at time zero at the beginning of each dosage, this is not accurate. In future work, it may benefit us to consider intercellular transport and diffusion, where drug concentration at cell membrane is treated as a continuous function instead of a discrete value. 
 
